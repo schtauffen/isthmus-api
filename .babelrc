@@ -1,0 +1,13 @@
+{
+  "ignore": "node_modules",
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "6.10.3"
+        }
+      }
+    ]
+  ]
+}

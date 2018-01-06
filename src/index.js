@@ -1,7 +1,7 @@
 const Koa = require('koa')
 const Router = require('koa-router')
 const json = require('koa-json')
-const bodyParser = require('koa-bodyparser')
+const bodyParser = require('koa-bodyparser-node6')
 const serverless = require('serverless-http')
 const AWS = require('aws-sdk')
 
@@ -39,11 +39,7 @@ const createResolver = dynamoDb => (action, params) => new Promise((resolve, rej
 
   dynamoDb[action](params, handler)
 })
-const resolve = createResolver(dynamoDb)
-const keys = Object.keys(Object.getPrototypeOf(dynamoDb))
-for (let key of keys) {
-  console.log(key, dynamoDb[key])
-}
+const db = createResolver(dynamoDb)
 
 router.get('getUser', '/users/:userId', async ctx => {
   const params = {
@@ -53,7 +49,7 @@ router.get('getUser', '/users/:userId', async ctx => {
     }
   }
 
-  await resolve('get', params)
+  await db('get', params)
     .then(result => {
       if (result.Item) {
         const { userId, name } = result.Item
@@ -80,7 +76,7 @@ router.post('createUser', '/users', async ctx => {
     }
   }
 
-  await resolve('put', params)
+  await db('put', params)
     .then(result => {
       ctx.body = params.Item
     })

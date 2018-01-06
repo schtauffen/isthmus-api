@@ -1,20 +1,25 @@
 {
   "name": "isthmus-api",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "lib/index.js",
   "author": "Zach Dahl <z.schtauffen@gmail.com>",
   "license": "ISC",
   "scripts": {
     "start": "sls offline start",
+    "prestart": "npm run build",
+    "build": "babel ./src --out-dir lib",
     "deploy": "sls deploy"
   },
   "dependencies": {
     "aws-sdk": "2.176.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "koa": "2.4.1",
-    "koa-bodyparser": "4.2.0",
+    "koa-bodyparser-node6": "^4.2.0",
     "koa-json": "2.0.2",
     "koa-router": "7.3.0",
-    "serverless-http": "1.5.2"
+    "serverless-http": "1.5.2",
+    "standard": "^10.0.3"
   },
   "devDependencies": {
     "serverless-dynamodb-local": "0.2.26",

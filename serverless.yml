@@ -7,6 +7,7 @@ plugins:
   - serverless-offline #serverless-offline must be last in this list
 
 custom:
+  entry: lib/index.handler
   userTableName: 'users-table-${self:provider.stage}'
   dynamodb:
     start:
@@ -33,16 +34,16 @@ provider:
 
 functions:
   app:
-    handler: index.handler
+    handler: ${self:custom.entry}
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
   getUser:
-    handler: index.handler
+    handler: ${self:custom.entry}
     events:
       - http: 'GET /users/{poxy+}'
   createUser:
-    handler: index.handler
+    handler: ${self:custom.entry}
     events:
       - http: 'POST /users'
 
