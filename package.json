@@ -8,7 +8,8 @@
     "start": "sls offline start",
     "prestart": "npm run build",
     "build": "babel ./src --out-dir lib",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "predeploy": "npm run build"
   },
   "dependencies": {
     "aws-sdk": "2.176.0",
