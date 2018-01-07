@@ -10,6 +10,7 @@ custom:
   entry: lib/index.handler
   contentTableName: 'content-table-${self:provider.stage}'
   userTableName: 'users-table-${self:provider.stage}'
+  schemaTableName: 'schema-table-${self:provider.stage}'
   dynamodb:
     start:
       migrate: true
@@ -42,6 +43,7 @@ provider:
   environment:
     USERS_TABLE: ${self:custom.userTableName}
     CONTENT_TABLE: ${self:custom.contentTableName}
+    SCHEMA_TABLE: ${self:custom.schemaTableName}
 
 functions:
   app:
@@ -63,6 +65,7 @@ resources:
     UsersDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
+        TableName: ${self:custom.userTableName}
         AttributeDefinitions:
           -
             AttributeName: userId
@@ -74,4 +77,40 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.userTableName}
+    SchemaDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.schemaTableName}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    ContentDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: ${self:custom.contentTableName}
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+          -
+            AttributeName: creationTimestamp
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+          -
+            AttributeName: creationTimestamp
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
