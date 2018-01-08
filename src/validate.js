@@ -72,6 +72,7 @@ const fetchValidator = async (fetching, type) => {
   }
 
   const result = await (fetching[type] = db.get(params))
+  // TODO - throw if no result.Item ?
   return isShape(result.Item)
 }
 
