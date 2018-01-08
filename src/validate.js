@@ -49,7 +49,9 @@ const isShape = shape => validate => async maybe =>
         )))
       }
 
-      // type[]
+      // TODO - [type] (array)
+      // can get complicated, especially when mixed with |:
+      // ie: [[a]|[b]|[c]] vs [a]|[b]|[c] vs [a|b|c]
       return validate(type, value)
     })))
     : false // throw error?
