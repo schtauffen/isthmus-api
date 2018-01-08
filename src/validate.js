@@ -2,25 +2,19 @@ const R = require('ramda')
 
 const db = require('./db')
 
+// helpers
 const isNothing = x => x == null
+const isRequired = str => /^!/.test(str)
+const isArray = str => /\[]$/.test(str)
+const isList = str => /^\(\)$/.test(str)
 
 /**
- *  {
- *    a: 'string',
- *    b: 'number',
- *    c: 'D',
- *    d: 'string|boolean'
- *    e: 'string[]'
- *  }
  *  !?type1(|type2|...|typeN)?([])?
  *  ^- required
  *    ^- type (1 is required)
  *          ^- optional "or" types
  *                              ^- is this a list?
  */
-const isRequired = str => /^!/.test(str)
-const isArray = str => /\[]$/.test(str)
-
 // TODO - async-optimized all and any methods
 const isShape = shape => validate => async maybe =>
   primitives.object(shape) && primitives.object(maybe) // TODO - required behavior with schemas?
@@ -43,7 +37,7 @@ const isShape = shape => validate => async maybe =>
           )))
       }
 
-      if (type[0] === '(' && type[type.length - 1] === ')') {
+      if (isList(type)) {
         const types = type.slice(1, type.length - 1).split('|')
         return R.any(R.identity, await Promise.all(types.map(t =>
           validate(required ? `!${t}` : t, value)
@@ -73,7 +67,9 @@ const fetchValidator = async (fetching, type) => {
 
   const result = await (fetching[type] = db.get(params))
   // TODO - throw if no result.Item ?
-  return isShape(result.Item)
+  // TODO - always include Root ?
+  // TODO - handle "extends"
+  return isShape(result.Item.shape)
 }
 
 const Validator = cache => {

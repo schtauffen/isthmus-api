@@ -6,7 +6,7 @@ const addRoute = ({ router, db }) => {
     const params = {
       TableName: process.env.USERS_TABLE,
       Item: {
-        userId: uuid(),
+        id: uuid(),
         ...ctx.request.body
       }
     }

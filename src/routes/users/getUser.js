@@ -1,9 +1,9 @@
 const addRoute = ({ router, db }) => {
-  router.get('getUser', '/users/:userId', async ctx => {
+  router.get('getUser', '/users/:id', async ctx => {
     const params = {
       TableName: process.env.USERS_TABLE,
       Key: {
-        userId: ctx.params.userId
+        id: ctx.params.id
       }
     }
 
@@ -13,7 +13,7 @@ const addRoute = ({ router, db }) => {
         ctx.body = result.Item
       } else {
         ctx.status = 400
-        ctx.body = { error: `User not found: ${ctx.params.userId}` }
+        ctx.body = { error: `User not found: ${ctx.params.id}` }
       }
     } catch (err) {
       console.error(err)
