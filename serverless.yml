@@ -34,8 +34,9 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USER_TABLE}"
-#        - { "Fn::GetAtt": ["UserDynamoDBTable", "Arn"] }
+      Resource:
+#        "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.USER_TABLE}"
+        - { "Fn::GetAtt": ["UserDynamoDBTable", "Arn"] }
     - Effect: Allow
       Action:
         - dynamodb:Query
@@ -44,15 +45,72 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CONTENT_TABLE}"
+      Resource:
+#        "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SITE_TABLE}"
+        - { "Fn::GetAtt": ["SiteDynamoDBTable", "Arn"] }
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+#        "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.PAGE_TABLE}"
+        - { "Fn::GetAtt": ["PageDynamoDBTable", "Arn"] }
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+#        "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.SCHEMA_TABLE}"
+        - { "Fn::GetAtt": ["SchemaDynamoDBTable", "Arn"] }
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+#        "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.RESOURCE_TABLE}"
+        - { "Fn::GetAtt": ["ResourceDynamoDBTable", "Arn"] }
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+#        "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.WIDGET_TABLE}"
+        - { "Fn::GetAtt": ["WidgetDynamoDBTable", "Arn"] }
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+#        "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CONTENT_TABLE}"
+        - { "Fn::GetAtt": ["ContentDynamoDBTable", "Arn"] }
   environment:
-    CONTENT_TABLE: contentTableName
-    PAGE_TABLE: pageTableName
-    RESOURCE_TABLE: resourceTableName
-    SCHEMA_TABLE: schemaTableName
-    SITE_TABLE: siteTableName
-    USER_TABLE: userTableName
-    WIDGET_TABLE: widgetTableName
+    CONTENT_TABLE: ${self:custom.contentTableName}
+    PAGE_TABLE: ${self:custom.pageTableName}
+    RESOURCE_TABLE: ${self:custom.resourceTableName}
+    SCHEMA_TABLE: ${self:custom.schemaTableName}
+    SITE_TABLE: ${self:custom.siteTableName}
+    USER_TABLE: ${self:custom.userTableName}
+    WIDGET_TABLE: ${self:custom.widgetTableName}
 
 functions:
   app:
@@ -63,11 +121,11 @@ functions:
   getUser:
     handler: ${self:custom.entry}
     events:
-      - http: 'GET /users/{poxy+}'
+      - http: 'GET /user/{poxy+}'
   createUser:
     handler: ${self:custom.entry}
     events:
-      - http: 'POST /users'
+      - http: 'POST /user'
 
 resources:
   Resources:
