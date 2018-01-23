@@ -1,11 +1,12 @@
-const Koa = require('koa')
-const Router = require('koa-router')
-const json = require('koa-json')
-const serverless = require('serverless-http')
+import Koa from 'koa'
+import Router from 'koa-router'
+import json from 'koa-json'
+import serverless from 'serverless-http'
 
-const db = require('./db')
-const create = require('./create')
-const get = require('./get')
+import db from './db'
+import create from './create'
+import get from './get'
+import home from './home'
 
 /**
  *  Root
@@ -40,7 +41,7 @@ const TYPES = {
 }
 
 const router = new Router()
-require('./home')({ router })
+home({ router })
 for (let key in TYPES) {
   const name = TYPES[key]
   create({ router, db, name })

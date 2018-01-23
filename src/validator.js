@@ -1,6 +1,5 @@
-const R = require('ramda')
-
-const db = require('./db')
+import R from 'ramda'
+import db from './db'
 
 // helpers
 const isNothing = x => x == null

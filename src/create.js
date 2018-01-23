@@ -1,7 +1,7 @@
-const uuid = require('uuid/v4')
-const bodyParser = require('koa-bodyparser-node6')
+import uuid from 'uuid/v4'
+import bodyParser from 'koa-bodyparser-node6'
 
-const Validator = require('./validate')
+import Validator from './validator'
 
 const addRoute = ({
   db,

@@ -15,6 +15,7 @@
     ["transform-runtime", {
       "polyfill": false,
       "regenerator": false
-    }]
+    }],
+    "ramda"
   ]
 }

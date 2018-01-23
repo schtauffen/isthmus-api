@@ -1,7 +1,7 @@
+import AWS from 'aws-sdk'
+
 const addRoute = ({ router }) => {
   router.get('home', '/', async ctx => {
-    const AWS = require('aws-sdk')
-
     const db = new AWS.DynamoDB({
       region: 'localhost',
       endpoint: 'http://localhost:8000'
