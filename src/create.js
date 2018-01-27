@@ -7,6 +7,7 @@ const addRoute = ({
   db,
   name,
   router,
+  schemaId,
   tableName = process.env[`${name.toUpperCase()}_TABLE`],
   uri = `/${name.toLowerCase()}`
 }) => {
@@ -18,11 +19,12 @@ const addRoute = ({
     bodyParser(),
     async ctx => {
       const validate = Validator()
-      const { noValidate, ...body } = ctx.request.body
+      // TODO - permission checking for "noValidate" and "id" features
+      const { noValidate, id, ...body } = ctx.request.body
       const params = {
         TableName: tableName,
         Item: {
-          id: uuid(),
+          id: id != null ? id : uuid(),
           ...body
         }
       }
@@ -30,12 +32,12 @@ const addRoute = ({
       try {
         const valid = noValidate
           ? true
-          : await validate(name, params.Item)
+          : await validate(schemaId, params.Item)
 
         if (!valid) {
-          // TODO - better error messages
+          // TODO - better error messages (how did it fail?)
           // TODO - forward validation errors to response...
-          throw new TypeError(`Proposed ${lower} did not pass validation: ${params.Item}`)
+          throw new TypeError(`Proposed ${lower} did not pass validation: ${JSON.stringify(params.Item)}`)
         }
 
         await db.put(params)

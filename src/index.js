@@ -8,45 +8,16 @@ import create from './create'
 import get from './get'
 import home from './home'
 
-/**
- *  Root
- *  ->User
- *    + custom fields
- *  ->Site
- *    + custom fields
- *  ->Page
- *    + custom fields
- *  ->Schema
- *    + custom fields
- *  ->Resource
- *    + custom fields
- *    ->Image (and some other predefined)
- *  ->Widgets
- *  ->Content
- *    + custom fields
- *    ->Article (and some other predefined)
- *    ->User-created
- *
- *  The schemas "group" defines which table it belongs to
- *  Inheritance?
- */
-const TYPES = {
-  CONTENT: 'Content',
-  PAGE: 'Page',
-  RESOURCE: 'Resource',
-  SCHEMA: 'Schema',
-  SITE: 'Site',
-  USER: 'User',
-  WIDGET: 'Widget'
-}
+import { TABLES } from './constants'
 
 const router = new Router()
 home({ router })
-for (let key in TYPES) {
-  const name = TYPES[key]
-  create({ router, db, name })
+Object.keys(TABLES).forEach(KEY => {
+  const schemaId = TABLES[KEY].SCHEMA_ID
+  const name = TABLES[KEY].NAME
+  create({ router, db, name, schemaId })
   get({ router, db, name })
-}
+})
 
 const app = new Koa()
 app.use(json())

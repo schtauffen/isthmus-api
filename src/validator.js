@@ -15,6 +15,7 @@ const isList = str => /^\(\)$/.test(str)
  *                              ^- is this a list?
  */
 // TODO - async-optimized all and any methods
+// TODO - type -> id in this code
 const isShape = shape => validate => async maybe =>
   primitives.object(shape) && primitives.object(maybe) // TODO - required behavior with schemas?
     ? R.all(R.identity, await Promise.all(Object.keys(shape).map(async fieldName => {
@@ -61,7 +62,9 @@ const fetchValidator = async (fetching, type) => {
 
   const params = {
     TableName: process.env.SCHEMA_TABLE,
-    Key: type
+    Key: {
+      id: type
+    }
   }
 
   const result = await (fetching[type] = db.get(params))
